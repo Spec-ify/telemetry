@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:3104
+
+processors:
+ batch:
+
+exporters:
+  logging:
+    loglevel: debug
+  otlphttp:
+    endpoint: http://tempo:4318
+    encoding: json
+    tls:
+      insecure: true
+
+     # headers:
+     #     authorization: Basic <Base64 version of your username:api-key>
+
+service:
+ pipelines:
+   traces:
+     receivers: [otlp]
+     processors: [batch]
+     exporters: [otlphttp]
